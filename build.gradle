@@ -1730,6 +1730,14 @@ void addMavenPublication(Project project, List<String> projectDependencies) {
                         artifact project.tasks."modularPublicationJar$t.capital" {
                             classifier "$t.name"
                         }
+                        /*START MS EDIT*/
+                        artifact project.tasks."modularPublicationSourcesJar$t.capital" {
+                            classifier "sources"
+                        }
+                        artifact project.tasks."modularPublicationJavadocJar$t.capital" {
+                            classifier "javadoc"
+                        }
+                        /*STOP MS EDIT*/
                     }
 
                     pom.withXml {
@@ -4987,6 +4995,7 @@ compileTargets { t ->
     // Maven Publications
     def publicationDirName = "${platformPrefix}publications"
     def publicationDir = "${rootProject.buildDir}/${publicationDirName}"
+    def srcJavadocDir = "${rootProject.buildDir}/javadoc"
 
     moduleProjList.each { project ->
         // Create publications to be uploaded
@@ -4997,6 +5006,7 @@ compileTargets { t ->
         def dstModularJarDir="${publicationDir}"
         def srcClassesDir = "${buildDir}/${platformPrefix}module-classes"
         def srcLibsDir = "${buildDir}/${platformPrefix}module-lib"
+        def srcSourcesDir = "${modulesSrcDir}/${moduleName}"
 
         def modularEmptyPublicationJarName = "${moduleName}.jar"
         def modularEmptyPublicationJarTask = project.task("moduleEmptyPublicationJar${t.capital}", type: Jar) {
@@ -5019,6 +5029,25 @@ compileTargets { t ->
 
         buildModulesTask.dependsOn(modularPublicationJarTask)
 
+        /*START MS EDIT*/
+        def modularPublicationSourcesJarName = "${moduleName}-sources.jar"
+        def modularPublicationSourcesJarTask = project.task("modularPublicationSourcesJar${t.capital}", type: Jar) {
+            destinationDir = file("${dstModularJarDir}")
+            archiveName = modularPublicationSourcesJarName
+            from srcSourcesDir
+        }
+
+        buildModulesTask.dependsOn(modularPublicationSourcesJarTask)
+
+        def modularPublicationJavadocJarName = "${moduleName}-javadoc.jar"
+        def modularPublicationJavadocJarTask = project.task("modularPublicationJavadocJar${t.capital}", type: Jar) {
+            destinationDir = file("${dstModularJarDir}")
+            archiveName = modularPublicationJavadocJarName
+            from srcJavadocDir
+        }
+
+        buildModulesTask.dependsOn(modularPublicationJavadocJarTask)
+        /*STOP MS EDIT*/
     }
     // ============================================================
 
