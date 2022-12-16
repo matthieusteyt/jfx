@@ -1,0 +1,8 @@
+BUILD INSTRUCTIONS
+------------------
+- See https://wiki.openjdk.java.net/display/OpenJFX/Building+OpenJFX
+---> build with a previous version of the jdk, if needed export JAVA_HOME -> export JAVA_HOME="C:\Program Files\Java\jdk-XX"
+--> build with ./gradlew
+--> generate javadoc with ./gradlew javadoc
+--> activate publish tasks with gradle.properties file with line 'MAVEN_PUBLISH = true'
+--> publish to local maven with ./gradlew publishToMavenLocal (version with date/time is automatically generated)
