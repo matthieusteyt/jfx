@@ -29,6 +29,7 @@ import com.sun.javafx.scene.control.Properties;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
@@ -876,11 +877,19 @@ public abstract class TableViewSkinBase<M, S, C extends Control, I extends Index
      * scrollbar.
      */
     private void updateContentWidth() {
+        /*START MS EDIT*/
+        boolean tableMenuButtonVisible = false;
+        BooleanProperty tableMenuButtonVisibleProperty = TableSkinUtils.tableMenuButtonVisibleProperty(this);
+        if(tableMenuButtonVisibleProperty!=null)
+        {
+            tableMenuButtonVisible = tableMenuButtonVisibleProperty.get();
+        }
         double contentWidth = flow.getWidth();
-
-        if (flow.getVbar().isVisible()) {
+        //(ms) It is only importent to substract the VBar when the tableMenuButton is visible. It has always the same width as the VBar (see layoutChildren in TableHeaderRow)
+        if (tableMenuButtonVisible) {
             contentWidth -= flow.getVbar().getWidth();
         }
+        /*STOP MS EDIT*/
 
         if (contentWidth <= 0) {
             // Fix for RT-14855 when there is no content in the TableView.
