@@ -885,9 +885,10 @@ public abstract class TableViewSkinBase<M, S, C extends Control, I extends Index
             tableMenuButtonVisible = tableMenuButtonVisibleProperty.get();
         }
         double contentWidth = flow.getWidth();
-        //(ms) It is only importent to substract the VBar when the tableMenuButton is visible. It has always the same width as the VBar (see layoutChildren in TableHeaderRow)
+        //(ms) It is only important to subtract the VBar when the tableMenuButton is visible. It has always the same width as the VBar (see layoutChildren in TableHeaderRow)
+        // The width of the VBar is only initialized (read pref width set) after it was first visible, so take pref width.
         if (tableMenuButtonVisible) {
-            contentWidth -= flow.getVbar().getWidth();
+            contentWidth -= flow.getVbar().prefWidth(-1);
         }
         /*STOP MS EDIT*/
 
