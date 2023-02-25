@@ -268,6 +268,20 @@ public final class Platform {
         return PlatformImpl.isSupported(feature);
     }
 
+    /*START MS EDIT*/
+    /**
+     * Indicates whether or not a nested event loop can be started
+     * from the current thread in the current state. Note that a nested
+     * event loop is not allowed outside of an event handler.
+     *
+     * @return flag indicating whether a nested event loop can be started.
+     */
+    public static boolean canStartNestedEventLoop()
+    {
+        return Toolkit.getToolkit().canStartNestedEventLoop();
+    }
+    /*END MS EDIT*/
+
     /**
      * Enter a nested event loop and block until the corresponding
      * exitNestedEventLoop call is made.
