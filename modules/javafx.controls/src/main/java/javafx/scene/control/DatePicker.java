@@ -31,6 +31,7 @@ import java.time.LocalDate;
 import java.time.DateTimeException;
 import java.time.chrono.Chronology;
 import java.time.chrono.IsoChronology;
+import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -446,8 +447,13 @@ public class DatePicker extends ComboBoxBase<LocalDate> {
         String text = getEditor().getText();
         StringConverter<LocalDate> converter = getConverter();
         if (converter != null) {
-            LocalDate value = converter.fromString(text);
-            setValue(value);
+            try {
+                LocalDate value = converter.fromString(text);
+                setValue(value);
+            }
+            catch (DateTimeParseException dtpe) {
+                cancelEdit();
+            }
         }
     }
 
